@@ -25,9 +25,9 @@ socket.on("submit", (data) => {
   output.innerHTML += `<p><strong>${data.author}</strong> ${data.message}</p>`;
 });
 
-const stop = _.debounce(() => (feedback.innerHTML = ""), 2000);
+const clearOnInactivity = _.debounce(() => (feedback.innerHTML = ""), 2000);
 
 socket.on("type", (data) => {
   feedback.innerHTML = `<p><em>${data.author} is typing a message...</em></p>`;
-  lazyType();
+  clearOnInactivity();
 });
