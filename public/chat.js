@@ -5,9 +5,12 @@ const author = document.querySelector("#author");
 const btn = document.querySelector("#send");
 const output = document.querySelector("#output");
 const feedback = document.querySelector("#feedback");
+const form = document.querySelector("form");
 
 //  EMITTERS
-btn.addEventListener("click", () => {
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
   socket.emit("submit", {
     message: message.value,
     author: author.value
@@ -19,10 +22,21 @@ message.addEventListener("keypress", () => {
   socket.emit("type", {author: author.value, message: message.value});
 });
 
+const renderMessage = (data) => {
+  output.innerHTML += `<p><strong>${data.author}</strong> ${data.message}</p>`;
+};
+
 // LISTENERS
+
+socket.on("previousMessage", (data) => {
+  data.messages.map((v) => {
+    renderMessage(v);
+  });
+});
+
 socket.on("submit", (data) => {
   feedback.innerHTML = "";
-  output.innerHTML += `<p><strong>${data.author}</strong> ${data.message}</p>`;
+  renderMessage(data);
 });
 
 const clearOnInactivity = _.debounce(() => (feedback.innerHTML = ""), 2000);
