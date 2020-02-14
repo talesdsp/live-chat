@@ -12,6 +12,7 @@ btn.addEventListener("click", () => {
     message: message.value,
     author: author.value
   });
+  message.value = "";
 });
 
 message.addEventListener("keypress", () => {
